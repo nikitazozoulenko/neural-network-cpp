@@ -21,9 +21,12 @@
   <ItemGroup>
     <ClCompile Include="main.cpp" />
     <ClCompile Include="NeuralNetwork.cpp" />
+    <ClCompile Include="ProductInputCreator.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Layer.h" />
     <ClInclude Include="NeuralNetwork.h" />
+    <ClInclude Include="ProductInputCreator.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{9883a78a-97f6-4577-b29b-04b2ff3f79a1}</ProjectGuid>

@@ -30,6 +30,9 @@ public:
 	void forward(MatrixBatch<SIZE_INPUT_LAYER> &input_matrix);
 	void backprop(MatrixBatch<SIZE_OUTPUT_LAYER> &Y);
 
+	void print_forward();
+	void print_backprop();
+
 	MatrixBatch<SIZE_OUTPUT_LAYER> get_Y_hat() { return Y_hat; }
 
 protected:
@@ -41,6 +44,8 @@ private:
 
 	Matrix<double, SIZE_INPUT_LAYER, SIZE_HIDDEN_LAYER_1> W1;
 	Matrix<double, SIZE_HIDDEN_LAYER_1, SIZE_OUTPUT_LAYER> W2;
+	Matrix<double, SIZE_INPUT_LAYER, SIZE_HIDDEN_LAYER_1> dKdW1;
+	Matrix<double, SIZE_HIDDEN_LAYER_1, SIZE_OUTPUT_LAYER> dKdW2;
 
 
 	MatrixBatch<SIZE_INPUT_LAYER> X;

@@ -4,6 +4,8 @@
 #include "NeuralNetwork.h"
 #include <string>
 
+#include "ProductInputCreator.h"
+
 using Eigen::Matrix;
 using Eigen::MatrixXd;
 
@@ -16,23 +18,42 @@ int main()
 {
 	NeuralNetwork network;
 
-	MatrixBatch<2> input;
-	input << 0.1, 0.2,
-		0.3, 0.4,
-		0.5, 0.1;
+	ProductInputCreator creator;
 
-	MatrixBatch<1> output;
-	output << 0.3, 
-			  0.7, 
-			  0.6;
+	creator.gen_values();
+	MatrixBatch<2> input = creator.get_input();
+	MatrixBatch<1> output = creator.get_output();
+	network.forward(input);
+	network.backprop(output);
+	network.print_forward();
+	network.print_backprop();
 
+	std::cout << std::endl << std::endl << std::endl << std::endl;
 	for (int i = 0; i != 10000; ++i)
 	{
+		creator.gen_values();
+		MatrixBatch<2> input = creator.get_input();
+		MatrixBatch<1> output = creator.get_output();
 		network.forward(input);
 		network.backprop(output);
 		
 	}
-	network.forward(input);
+
+	MatrixBatch<2> i;
+	i << 1.0, 1.0,
+		 1.0, 0.5,
+		 0.5, 0.5;
+
+	MatrixBatch<1> o;
+	o << 1.0,
+		 0.5,
+		 0.25;
+
+	network.forward(i);
+	network.backprop(o);
+	network.print_forward();
+	network.print_backprop();
+
 	std::cin.get();
 
 	return 0;
