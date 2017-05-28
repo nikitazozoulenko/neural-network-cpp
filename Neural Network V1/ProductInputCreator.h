@@ -6,12 +6,14 @@
 class ProductInputCreator
 {
 public:
-	NeuralNetwork::MatrixBatch<2> get_input();
-	NeuralNetwork::MatrixBatch<1> get_output();
+	ProductInputCreator(int batch_size);
+	MatrixXd get_input();
+	MatrixXd get_output();
 	void gen_values();
 protected:
 private:
-	NeuralNetwork::MatrixBatch<2> input;
-	NeuralNetwork::MatrixBatch<1> output;
+	int batch_size;
+	MatrixXd input;
+	MatrixXd output;
 };
 #endif // !PRODUCTINPUTCREATOR

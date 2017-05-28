@@ -1,55 +1,83 @@
-#include <iostream>
 #include <Eigen/Dense>
-
-#include "NeuralNetwork.h"
 #include <string>
+#include <vector>
+
+#include <iostream>
+#include "NeuralNetwork.h"
+#include "Layer.h"
 
 #include "ProductInputCreator.h"
 
 using Eigen::Matrix;
 using Eigen::MatrixXd;
 
-template <size_t N>
-using MatrixBatch = NeuralNetwork::MatrixBatch<N>;
-template <size_t N>
-using MatrixSingle = NeuralNetwork::MatrixSingle<N>;
-
 int main()
 {
-	NeuralNetwork network;
+	Layer layer_input(
+		"input",	//type
+		0,			//index
+		2);			//neurons
 
-	ProductInputCreator creator;
+	Layer layer_hidden1(
+		"hidden1",	//type
+		1,			//index
+		3);		//neurons
 
-	creator.gen_values();
-	MatrixBatch<2> input = creator.get_input();
-	MatrixBatch<1> output = creator.get_output();
-	network.forward(input);
-	network.backprop(output);
+	Layer layer_hidden2(
+		"hidden2",	//type
+		2,			//index
+		3);		//neurons
+
+	Layer layer_hidden3(
+		"hidden3",	//type
+		3,			//index
+		3);		//neurons
+
+	Layer layer_output(
+		"output",	//type
+		4,			//index
+		1);			//neurons
+
+	int batch_size = 3;
+
+	std::vector<Layer> layers;
+	layers = { layer_input,
+			   layer_hidden1,
+			   layer_hidden2,
+			   layer_hidden3,
+			   layer_output };
+
+	NeuralNetwork network(layers, batch_size);
+
+	ProductInputCreator creator(batch_size);
+
+	MatrixXd in(3, 2);
+	in << 1.0, 1.0,
+		1.0, 0.5,
+		0.5, 0.5;
+
+	MatrixXd o(3, 1);
+	o << 1.0,
+		0.5,
+		0.25;
+
+	network.forward(in);
+	network.backprop(o);
 	network.print_forward();
 	network.print_backprop();
 
 	std::cout << std::endl << std::endl << std::endl << std::endl;
-	for (int i = 0; i != 10000; ++i)
+	for (int i = 0; i != 100000; ++i)
 	{
 		creator.gen_values();
-		MatrixBatch<2> input = creator.get_input();
-		MatrixBatch<1> output = creator.get_output();
-		network.forward(input);
-		network.backprop(output);
-		
+		MatrixXd in = creator.get_input();
+		MatrixXd o = creator.get_output();
+		network.forward(in);
+		network.backprop(o);
+
 	}
 
-	MatrixBatch<2> i;
-	i << 1.0, 1.0,
-		 1.0, 0.5,
-		 0.5, 0.5;
-
-	MatrixBatch<1> o;
-	o << 1.0,
-		 0.5,
-		 0.25;
-
-	network.forward(i);
+	network.forward(in);
 	network.backprop(o);
 	network.print_forward();
 	network.print_backprop();
@@ -58,51 +86,3 @@ int main()
 
 	return 0;
 }
-
-
-void print(std::string name, MatrixXd m)
-{
-	std::cout << name + " =\n" << m << std::endl << std::endl;
-}
-
-
-
-
-
-//using Eigen::MatrixXd;
-//
-//double sigmoid(double x)
-//{
-//	return 1.0 / (1.0 + exp(-x));
-//}
-//
-//void f(Eigen::MatrixXd& matrix)
-//{
-//	matrix.unaryExpr(&sigmoid);
-//}
-//
-//
-//int main()
-//{
-//	MatrixXd m(2, 2);
-//	m(0, 0) = 3;
-//	m(1, 0) = 2.5;
-//	m(0, 1) = -1;
-//	m(1, 1) = m(1, 0) + m(0, 1);
-//
-//	MatrixXd m2(2, 2);
-//	m(0, 0) = 3;
-//	m(1, 0) = 2.5;
-//	m(0, 1) = -1;
-//	m(1, 1) = m(1, 0) + m(0, 1);
-//	std::cout << m << std::endl;
-//
-//
-//		std::cout << m << std::endl;
-//
-//	m=m.unaryExpr(&sigmoid);
-//	std::cout << m << std::endl;
-//	std::cin.get();
-//}
-
-

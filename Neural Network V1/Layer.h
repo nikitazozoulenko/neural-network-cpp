@@ -3,10 +3,16 @@
 
 #include <string>
 
-struct Layer
+class Layer
 {
+public:
+	Layer(std::string type, unsigned index, int neurons) : type(type), index(index), neurons(neurons) {}
+
+	std::string type;
 	unsigned index;
 	int neurons;
+protected:
+private:
 };
 
 #endif //NEURAL_NET_LAYER_H
